@@ -38,3 +38,4 @@
 5.3 Запросы Select, Join, Outer Left, Right
 5.4 JDBC
 5.5 Индексирование, внешние ключи, естественные ключи
+6.1 adding new data on branch main
