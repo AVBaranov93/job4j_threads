@@ -38,4 +38,9 @@
 5.3 Запросы Select, Join, Outer Left, Right
 5.4 JDBC
 5.5 Индексирование, внешние ключи, естественные ключи
+<<<<<<< Updated upstream
 6.1 adding new data on branch main
+=======
+6. adding new functional on fix branch
+7. 7. adding some new fanctional on branch fix
+>>>>>>> Stashed changes
