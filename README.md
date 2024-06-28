@@ -43,4 +43,6 @@
 =======
 6. adding new functional on fix branch
 7. 7. adding some new fanctional on branch fix
->>>>>>> Stashed changes
+8. one
+9. two
+10. three
