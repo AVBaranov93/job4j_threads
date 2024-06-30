@@ -1,7 +1,5 @@
 # job4j_threads
 
-# job4j_design
-
 1. Коллекции Pro
    1.1 Параметризованные типы, Wildcard
    1.2 Итераторы
@@ -38,18 +36,12 @@
 5.3 Запросы Select, Join, Outer Left, Right
 5.4 JDBC
 5.5 Индексирование, внешние ключи, естественные ключи
-<<<<<<< Updated upstream
-6.1 adding new data on branch main
-=======
-6. adding new functional on fix branch
-7. 7. adding some new fanctional on branch fix
-8.1 adding some changes in main branch
-9. two
-10. three
-8. one
-9. two
-10. three
-10.1 add changes in branch hotfix
-10.2 123
-20. sdfdsf
-21. 12345
+
+
+Thread
+- Синхронные и асинхронные операции
+- Синхронизация ресурсов
+- Память в Thread
+- Потокобезопасные коллекции
+- Пулы
+- ForkJoin
