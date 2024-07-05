@@ -3,49 +3,84 @@ package ru.job4j.concurrent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Wget implements Runnable {
     private final String url;
     private final int speed;
+    private final String path;
 
-    public Wget(String url, int speed) {
+    public Wget(String url, int speed, String path) {
         this.url = url;
         this.speed = speed;
+        this.path = path;
     }
 
     @Override
     public void run() {
-        var file = new File("tmp.xml");
+        var file = new File(path);
         try (var input = new URL(url).openStream();
              var output = new FileOutputStream(file)) {
-            var dataBuffer = new byte[1024];
+            var dataBuffer = new byte[512];
             int bytesRead;
+            int bytesCount = 0;
+            var msStart = System.currentTimeMillis();
             while ((bytesRead = input.read(dataBuffer, 0, dataBuffer.length)) != -1) {
-                var downloadAt = System.nanoTime();
-                output.write(dataBuffer, 0, bytesRead);
-                long diff = System.nanoTime() - downloadAt;
-                long loadSpeed = 1024 * 1000000 / (System.nanoTime() - downloadAt);
-                long speedDiff = loadSpeed / speed;
-                if (speedDiff != 0) {
-                    try {
-                        Thread.sleep(speedDiff * 1000);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                for (int i = 0; i < bytesRead; i++) {
+                    if (bytesCount >= speed) {
+                        var diff = System.currentTimeMillis() - msStart;
+                        if (diff < 1000) {
+                            try {
+                                Thread.sleep(diff);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            bytesCount = 0;
+                            msStart = System.currentTimeMillis();
+                        }
                     }
+                    output.write(dataBuffer[i]);
+                    bytesCount++;
                 }
-                System.out.println("Read 1024 bytes : " + diff + " nano. load speed: " + loadSpeed + " byte/msec");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static boolean validate(String url, int speed, String path) {
+        boolean isValid = true;
+        /*check if url is valid*/
+        try {
+            URL addr = new URL(url);
+            HttpURLConnection huc = (HttpURLConnection) addr.openConnection();
+            if (HttpURLConnection.HTTP_OK != huc.getResponseCode()) {
+                isValid = false;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        /*check if speed is not set*/
+        if (speed == 0) {
+            isValid = false;
+        }
+        /*check if file exists*/
+        File f = new File(path);
+        if (!f.exists() || f.isDirectory()) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
     public static void main(String[] args) throws InterruptedException {
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
-        Thread wget = new Thread(new Wget(url, speed));
-        wget.start();
-        wget.join();
+        String path = args[2];
+        if (validate(url, speed, path)) {
+            Thread wget = new Thread(new Wget(url, speed, path));
+            wget.start();
+            wget.join();
+        }
     }
 }
