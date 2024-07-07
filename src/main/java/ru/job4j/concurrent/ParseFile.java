@@ -16,14 +16,14 @@ public class ParseFile {
 
 
     public synchronized String getContent() throws IOException {
-        return content(e -> true);
+        return contentAll(e -> true);
     }
 
     public synchronized String getContentWithoutUnicode() throws IOException {
-        return content(e -> e < 0x80);
+        return contentAll(e -> e < 0x80);
     }
 
-    private synchronized String content(Predicate<Integer> filter) throws IOException {
+    private synchronized String contentAll(Predicate<Integer> filter) throws IOException {
         try (InputStream input = new FileInputStream(file)) {
             StringBuilder output = new StringBuilder();
             int data;
