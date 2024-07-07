@@ -25,14 +25,14 @@ public class ParseFile {
 
     private synchronized String content(Predicate<Integer> filter) throws IOException {
         try (InputStream input = new FileInputStream(file)) {
-            String output = "";
+            StringBuilder output = new StringBuilder();
             int data;
-            while ((data = input.read()) > 0) {
+            while ((data = input.read()) != -1) {
                 if (filter.test(data)) {
-                    output += (char) data;
+                    output.append(data);
                 }
             }
-            return output;
+            return output.toString();
         }
     }
 }
