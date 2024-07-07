@@ -27,11 +27,11 @@ public class Wget implements Runnable {
             int bytesRead;
             long start = System.currentTimeMillis();
             while ((bytesRead = input.read(dataBuffer, 0, dataBuffer.length)) != -1) {
-                if (bytesCount / 1000 < speed) {
-                    if (System.currentTimeMillis() - start < 1000) {
-                        System.out.println("Waiting " + bytesCount / speed + "ms");
+                if (bytesCount >= speed) {
+                    long interval = System.currentTimeMillis() - start;
+                    if (interval < 1000) {
                         try {
-                            Thread.sleep(bytesCount / speed);
+                            Thread.sleep(1000 - interval);
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
