@@ -1,14 +1,19 @@
 package ru.job4j.concurrent.cash;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@ThreadSafe
 public class AccountStorage {
+    @GuardedBy("this")
     private final HashMap<Integer, Account> accounts = new HashMap<>();
 
     public synchronized boolean add(Account account) {
-        return accounts.putIfAbsent(account.id(), account) != null;
+        return accounts.putIfAbsent(account.id(), account) == null;
     }
 
     public synchronized boolean update(Account account) {
@@ -27,11 +32,10 @@ public class AccountStorage {
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        boolean transferSuccess = accounts.containsKey(fromId) && accounts.containsKey(toId)
-                && accounts.get(fromId).amount() >= amount;
+        boolean transferSuccess = getById(fromId).isPresent() && getById(toId).isPresent();
         if (transferSuccess) {
-            accounts.computeIfPresent(fromId, (id, fromAccount) -> new Account(id, fromAccount.amount() - amount));
-            accounts.computeIfPresent(toId, (id, toAccount) -> new Account(id, toAccount.amount() + amount));
+            accounts.put(fromId, new Account(fromId, getById(fromId).get().amount() - amount));
+            accounts.put(toId, new Account(toId, getById(toId).get().amount() + amount));
         }
         return transferSuccess;
     }
