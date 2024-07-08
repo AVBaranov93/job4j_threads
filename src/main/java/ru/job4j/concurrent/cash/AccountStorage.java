@@ -32,10 +32,12 @@ public class AccountStorage {
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        boolean transferSuccess = getById(fromId).isPresent() && getById(toId).isPresent();
+        Optional<Account> fromAccount = getById(fromId);
+        Optional<Account> toAccount = getById(toId);
+        boolean transferSuccess = fromAccount.isPresent() && toAccount.isPresent() && fromAccount.get().amount() >= amount;
         if (transferSuccess) {
-            accounts.put(fromId, new Account(fromId, getById(fromId).get().amount() - amount));
-            accounts.put(toId, new Account(toId, getById(toId).get().amount() + amount));
+            accounts.put(fromId, new Account(fromId, fromAccount.get().amount() - amount));
+            accounts.put(toId, new Account(toId, toAccount.get().amount() + amount));
         }
         return transferSuccess;
     }
