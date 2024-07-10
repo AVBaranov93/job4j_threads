@@ -15,7 +15,11 @@ class SimpleBlockingQueueTest {
         );
         Thread consumer = new Thread(
                 () -> {
-                    assertThat(queue.poll()).isEqualTo(expected);
+                    try {
+                        assertThat(queue.poll()).isEqualTo(expected);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
         );
         producer.start();
