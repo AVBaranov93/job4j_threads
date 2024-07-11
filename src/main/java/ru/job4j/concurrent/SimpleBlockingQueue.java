@@ -18,8 +18,7 @@ public class SimpleBlockingQueue<T> {
         this.limit = limit;
     }
 
-    public void offer(T value) {
-        synchronized (this) {
+    public synchronized void offer(T value) {
             while (queue.size() == limit) {
                 try {
                     this.wait();
@@ -29,23 +28,18 @@ public class SimpleBlockingQueue<T> {
             }
             queue.offer(value);
             this.notifyAll();
-        }
     }
 
-    public T poll() throws InterruptedException {
-        synchronized (this) {
+    public synchronized T poll() throws InterruptedException {
             while (queue.isEmpty()) {
                 this.wait();
             }
             T result = queue.poll();
             this.notifyAll();
             return result;
-        }
     }
 
-    public boolean isEmpty() {
-        synchronized (this) {
+    public synchronized boolean isEmpty() {
             return queue.isEmpty();
-        }
     }
 }
