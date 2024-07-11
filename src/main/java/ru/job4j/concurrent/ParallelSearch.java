@@ -2,40 +2,34 @@ package ru.job4j.concurrent;
 
 public class ParallelSearch {
 
-    public static void main(String[] args) {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<Integer>(5);
+    public static void main(String[] args) throws InterruptedException {
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
         final Thread consumer = new Thread(
                 () -> {
-                    while (true) {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
                         try {
-                            if (Thread.currentThread().isInterrupted()) {
-                                break;
-                            }
                             System.out.println(queue.poll());
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
                             Thread.currentThread().interrupt();
                         }
                     }
-                }
+                }, "CONSUMER"
         );
         consumer.start();
-        new Thread(
+        Thread producer = new Thread(
                 () -> {
                     for (int index = 0; index != 3; index++) {
-                        if (index == 2) {
-                            consumer.interrupt();
-                        }
                         queue.offer(index);
-
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                }
-
-        ).start();
+                }, "PRODUCER"
+        );
+        producer.start();
+        producer.join();
+        consumer.interrupt();
     }
 }
