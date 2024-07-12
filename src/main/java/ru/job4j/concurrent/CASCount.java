@@ -13,9 +13,6 @@ public class CASCount {
         Integer next;
         do {
             current = count.get();
-            if (current == null) {
-                throw new UnsupportedOperationException("Count is not impl.");
-            }
             next = current + 1;
         } while (!count.compareAndSet(current, next));
     }
