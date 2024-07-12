@@ -1,6 +1,7 @@
-package ru.job4j.concurrent.cash;
+package ru.job4j.concurrent.cache;
 
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AccountStorageTest {
