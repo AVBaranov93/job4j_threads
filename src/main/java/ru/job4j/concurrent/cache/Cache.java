@@ -14,11 +14,13 @@ public class Cache {
     }
 
     public boolean update(Base model) throws OptimisticException {
-        var stored = findById(model.id()).orElse(null);
-        if (stored != null && stored.version() != model.version()) {
-            throw new OptimisticException("version is not valid");
-        }
-        return memory.computeIfPresent(model.id(), (k, v) -> new Base(k, model.name(), model.version() + 1)) != null;
+        return memory.computeIfPresent(model.id(), (k, v) -> {
+            var stored = findById(model.id()).orElse(null);
+            if (stored != null && stored.version() != model.version()) {
+                throw new OptimisticException("version is not valid");
+            }
+            return new Base(k, model.name(), model.version() + 1);
+        }) != null;
     }
 
     public void delete(int id) {
