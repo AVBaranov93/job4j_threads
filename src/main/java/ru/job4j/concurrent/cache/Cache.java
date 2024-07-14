@@ -15,8 +15,7 @@ public class Cache {
 
     public boolean update(Base model) throws OptimisticException {
         return memory.computeIfPresent(model.id(), (k, v) -> {
-            var stored = findById(model.id()).orElse(null);
-            if (stored != null && stored.version() != model.version()) {
+            if (v.version() != model.version()) {
                 throw new OptimisticException("version is not valid");
             }
             return new Base(k, model.name(), model.version() + 1);
