@@ -4,18 +4,17 @@ public class ThreadPoolMain {
 
     public static void main(String[] args) throws Exception {
 
-        ThreadPool threadPool = new ThreadPool(3, 10);
+        ThreadPool threadPool = new ThreadPool();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             int taskNo = i;
-            threadPool.execute(() -> {
+            threadPool.work(() -> {
                 String message =
                         Thread.currentThread().getName()
                                 + ": Task " + taskNo;
                 System.out.println(message);
             });
         }
-        Thread.sleep(1000);
-        threadPool.stop();
+        threadPool.shutdown();
     }
 }

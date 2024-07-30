@@ -1,37 +1,36 @@
 package ru.job4j.concurrent.threadpool;
 
 import ru.job4j.concurrent.SimpleBlockingQueue;
-import java.util.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ThreadPool {
-    private final SimpleBlockingQueue<Runnable> simpleBlockingQueue;
-    private final List<Thread> threads = new ArrayList<>();
-    private boolean isStopped = false;
+    private final int size = Runtime.getRuntime().availableProcessors();
+    private final List<Thread> threads = new LinkedList<>();
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(size);
 
-    public ThreadPool(int noOfThreads, int maxNoOfTasks) {
-        simpleBlockingQueue = new SimpleBlockingQueue<>(maxNoOfTasks);
-        for (int i = 0; i < noOfThreads; i++) {
-            Runnable runnable = () -> {
-                while (!isStopped) {
-                    try {
-                        simpleBlockingQueue.poll().run();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+    public ThreadPool() {
+        for (int i = 0; i < size; i++) {
+            Thread thread = new Thread(() -> {
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        tasks.poll().run();
                     }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            };
-            Thread thread = new Thread(runnable);
-            threads.add(thread);
+            });
             thread.start();
+            threads.add(thread);
         }
     }
 
-    public synchronized void  execute(Runnable task) {
-        simpleBlockingQueue.offer(task);
+    public void work(Runnable job) {
+        tasks.offer(job);
     }
 
-    public synchronized void stop() {
-        this.isStopped = true;
+    public void shutdown() {
         for (Thread thread : threads) {
             thread.interrupt();
         }
