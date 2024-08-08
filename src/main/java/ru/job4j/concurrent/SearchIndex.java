@@ -18,8 +18,8 @@ class SearchIndex<T> extends RecursiveTask<Integer> {
 
     @Override
     protected Integer compute() {
-        if (from == to) {
-            return from;
+        if (to - from <= 10) {
+            return lineSearch();
         }
         int middle = (from + to) / 2;
         SearchIndex<T> firstHalf = new SearchIndex<>(array, target, from, middle);
@@ -28,19 +28,16 @@ class SearchIndex<T> extends RecursiveTask<Integer> {
         secondHalf.fork();
         firstHalf.join();
         secondHalf.join();
-        return findArrayIndex();
+        return Math.max(firstHalf.lineSearch(), secondHalf.lineSearch());
     }
     public int findIndex() {
-        if (array.length > 10) {
             ForkJoinPool forkJoinPool = new ForkJoinPool();
-            return forkJoinPool.invoke(new SearchIndex<T>(array, target, 0, array.length - 1));
-        }
-        return findArrayIndex();
+            return forkJoinPool.invoke(new SearchIndex<>(array, target, 0, array.length - 1));
     }
 
-    private int findArrayIndex() {
+    private int lineSearch() {
         int index = -1;
-        for (int i = 0; i < array.length; i++) {
+        for (int i = from; i < to; i++) {
             if (target.equals(array[i])) {
                 index = i;
                 break;
