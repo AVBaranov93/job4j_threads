@@ -9,6 +9,8 @@ class SearchIndex<T> extends RecursiveTask<Integer> {
     private final int from;
     private final int to;
 
+
+
     public SearchIndex(T[] array, T target, int from, int to) {
         this.array = array;
         this.target = target;
@@ -37,7 +39,7 @@ class SearchIndex<T> extends RecursiveTask<Integer> {
 
     private int lineSearch() {
         int index = -1;
-        for (int i = from; i < to; i++) {
+        for (int i = from; i <= to; i++) {
             if (target.equals(array[i])) {
                 index = i;
                 break;

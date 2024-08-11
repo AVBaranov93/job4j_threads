@@ -32,6 +32,15 @@ class SearchIndexTest {
         assertThat(searchIndex.findIndex()).isEqualTo(expected);
     }
 
+    @Test
+    void whenMathcesLastElementThenReturnIndexOfLastElement() {
+        String[] source = new String[] {"a", "b", "c", "d"};
+        String target = "d";
+        int expected = 3;
+        SearchIndex<String> searchIndex = new SearchIndex<>(source, target, 0, source.length - 1);
+        assertThat(searchIndex.findIndex()).isEqualTo(expected);
+    }
+
 
 
 }
