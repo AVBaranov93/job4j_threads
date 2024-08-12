@@ -62,18 +62,4 @@ public class RowColSum {
             return sum;
         });
     }
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-
-        int[][] source = new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        for (int[] arr : source) {
-            for (int value : arr) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
-        }
-
-        for (Sums value : sum(source)) {
-            System.out.println(value.getColSum() + " " + value.getRowSum());
-        }
-    }
 }
