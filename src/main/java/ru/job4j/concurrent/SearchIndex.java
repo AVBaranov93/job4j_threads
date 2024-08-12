@@ -32,9 +32,9 @@ class SearchIndex<T> extends RecursiveTask<Integer> {
         secondHalf.join();
         return Math.max(firstHalf.lineSearch(), secondHalf.lineSearch());
     }
-    public int findIndex() {
-            ForkJoinPool forkJoinPool = new ForkJoinPool();
-            return forkJoinPool.invoke(new SearchIndex<>(array, target, 0, array.length - 1));
+    public static <T> int findIndex(T[] array, T target) {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        return forkJoinPool.invoke(new SearchIndex<>(array, target, 0, array.length - 1));
     }
 
     private int lineSearch() {

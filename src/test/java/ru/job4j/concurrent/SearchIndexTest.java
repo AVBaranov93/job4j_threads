@@ -11,7 +11,7 @@ class SearchIndexTest {
         int target = 3;
         int expected = 2;
         SearchIndex<Integer> searchIndex = new SearchIndex<>(source, target, 0, source.length - 1);
-        assertThat(searchIndex.findIndex()).isEqualTo(expected);
+        assertThat(searchIndex.findIndex(source, target)).isEqualTo(expected);
     }
 
     @Test
@@ -20,7 +20,7 @@ class SearchIndexTest {
         String target = "f";
         int expected = 5;
         SearchIndex<String> searchIndex = new SearchIndex<>(source, target, 0, source.length - 1);
-        assertThat(searchIndex.findIndex()).isEqualTo(expected);
+        assertThat(searchIndex.findIndex(source, target)).isEqualTo(expected);
     }
 
     @Test
@@ -29,7 +29,7 @@ class SearchIndexTest {
         String target = "r";
         int expected = -1;
         SearchIndex<String> searchIndex = new SearchIndex<>(source, target, 0, source.length - 1);
-        assertThat(searchIndex.findIndex()).isEqualTo(expected);
+        assertThat(searchIndex.findIndex(source, target)).isEqualTo(expected);
     }
 
     @Test
@@ -38,7 +38,7 @@ class SearchIndexTest {
         String target = "d";
         int expected = 3;
         SearchIndex<String> searchIndex = new SearchIndex<>(source, target, 0, source.length - 1);
-        assertThat(searchIndex.findIndex()).isEqualTo(expected);
+        assertThat(searchIndex.findIndex(source, target)).isEqualTo(expected);
     }
 
 
