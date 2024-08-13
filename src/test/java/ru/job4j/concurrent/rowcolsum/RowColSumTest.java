@@ -1,23 +1,27 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.rowcolsum;
 
 import org.junit.jupiter.api.Test;
+import ru.job4j.concurrent.rowcolsum.RowColSum;
+import ru.job4j.concurrent.rowcolsum.Sums;
 
 import java.util.concurrent.ExecutionException;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RowColSumTest {
     @Test
     public void whenSerialThan() {
         int[][] source = new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-        assertThat(RowColSum.sum(source)[1].getColSum()).isEqualTo(15);
+        Sums[] expected = new Sums[] {new Sums(12, 6), new Sums(15, 15), new Sums(18, 24)};
+        assertArrayEquals(expected, RowColSum.sum(source));
     }
 
     @Test
     public void whenAsyncThanGetSameResult() {
         int[][] source = new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        Sums[] expected = new Sums[] {new Sums(12, 6), new Sums(15, 15), new Sums(18, 24)};
         try {
-            assertThat(RowColSum.asyncSum(source)[1].getColSum()).isEqualTo(15);
+            assertArrayEquals(expected, RowColSum.asyncSum(source));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

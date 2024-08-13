@@ -1,26 +1,9 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.rowcolsum;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class RowColSum {
-    public static class Sums {
-        private int rowSum;
-        private int colSum;
-
-        public Sums(int rowSum, int colSum) {
-            this.rowSum = rowSum;
-            this.colSum = colSum;
-        }
-
-        public int getRowSum() {
-            return rowSum;
-        }
-
-        public int getColSum() {
-            return colSum;
-        }
-    }
 
     public static Sums[] sum(int[][] matrix) {
         Sums[] result = new Sums[matrix.length];
