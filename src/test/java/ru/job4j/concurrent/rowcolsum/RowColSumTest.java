@@ -1,11 +1,8 @@
 package ru.job4j.concurrent.rowcolsum;
 
 import org.junit.jupiter.api.Test;
-import ru.job4j.concurrent.rowcolsum.RowColSum;
-import ru.job4j.concurrent.rowcolsum.Sums;
 
 import java.util.concurrent.ExecutionException;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RowColSumTest {
